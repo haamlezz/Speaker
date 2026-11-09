@@ -1,0 +1,719 @@
+<title>TMW-27 Floorstander</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Research, simulators and build drawings for a 3-way vented floor-standing loudspeaker.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single drafting sheet. Title block on top, then numbered build stages; drawings sit on a faint grid like drafting film. */
+:root{
+  --paper:#F2F4F3; --sheet:#FBFCFB; --ink:#1B2126; --muted:#56616A; --line:#C7CED1; --grid:#E3E8E8;
+  --accent:#1D5BC9; --wood:#9A5D12; --ok:#2E7D4F; --warn:#B4231B; --fill:#E8EDEF;
+  --display:"Archivo Narrow","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#101519; --sheet:#151B20; --ink:#E1E7EA; --muted:#93A0A8; --line:#2E3940; --grid:#1D252B;
+  --accent:#74A7FF; --wood:#E0A65C; --ok:#5CC48A; --warn:#FF7B6E; --fill:#1E272D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#101519; --sheet:#151B20; --ink:#E1E7EA; --muted:#93A0A8; --line:#2E3940; --grid:#1D252B;
+  --accent:#74A7FF; --wood:#E0A65C; --ok:#5CC48A; --warn:#FF7B6E; --fill:#1E272D; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:15px/1.6 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(34px,6vw,58px);font-weight:700;letter-spacing:.01em}
+h2{font-size:28px;font-weight:600}
+h3{font-size:19px;font-weight:600}
+p{margin:0;max-width:68ch}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.label{font:500 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* title block */
+.titleblock{margin-top:24px;border:1.5px solid var(--ink);background:var(--sheet);display:grid;grid-template-columns:1fr auto}
+.tb-main{padding:22px 24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.tb-main p{color:var(--muted)}
+.tb-side{border-left:1.5px solid var(--ink);display:grid;grid-template-columns:repeat(2,minmax(120px,1fr))}
+.tb-side div{padding:10px 14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.tb-side div:nth-child(2n){border-right:0}
+.tb-side b{font:600 20px/1.2 var(--mono);font-variant-numeric:tabular-nums}
+@media (max-width:760px){.titleblock{grid-template-columns:1fr}.tb-side{border-left:0;border-top:1.5px solid var(--ink)}}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px}
+nav.toc a{font:500 12px/1 var(--mono);padding:8px 10px;border:1px solid var(--line);background:var(--sheet);color:var(--ink);text-decoration:none}
+nav.toc a:hover{border-color:var(--accent);color:var(--accent)}
+
+section{display:flex;flex-direction:column;gap:16px;scroll-margin-top:16px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1.5px solid var(--ink);padding-bottom:8px}
+.sec-head .label{color:var(--accent)}
+.sheet{background:var(--sheet);border:1px solid var(--line);padding:18px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.cols>*{min-width:0}
+ul,ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+li{max-width:72ch}
+.note{border-left:3px solid var(--wood);padding:4px 0 4px 12px;color:var(--ink)}
+.note.warn{border-color:var(--warn)}
+
+/* tables */
+.tscroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 11px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.hl td{background:var(--fill)}
+
+/* simulators */
+.sim{display:grid;grid-template-columns:300px 1fr;gap:16px}
+.sim>*{min-width:0}
+@media (max-width:820px){.sim{grid-template-columns:1fr}}
+.controls{display:flex;flex-direction:column;gap:12px}
+.ctl{display:flex;flex-direction:column;gap:4px}
+.ctl .row{display:flex;justify-content:space-between;gap:8px}
+.ctl output{font:500 13px var(--mono)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+select,input[type=number]{font:14px var(--body);padding:6px 8px;background:var(--paper);color:var(--ink);border:1px solid var(--line);width:100%}
+.ts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.ts label{display:flex;flex-direction:column;gap:2px;font:500 10.5px var(--mono);color:var(--muted);letter-spacing:.04em}
+.ts input{padding:4px 6px;font:13px var(--mono)}
+.seg{display:flex;border:1px solid var(--line);width:100%}
+.seg button{flex:1;font:500 13px var(--body);padding:7px 6px;background:var(--paper);color:var(--ink);border:0;border-right:1px solid var(--line);cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.charts{grid-template-columns:1fr}}
+.chart{display:flex;flex-direction:column;gap:4px;min-width:0}
+.chart canvas{width:100%;height:190px;display:block;background:var(--paper);border:1px solid var(--line)}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.readout div{background:var(--sheet);padding:8px 10px;display:flex;flex-direction:column;gap:2px}
+.readout b{font:600 17px var(--mono);font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font:500 11px var(--mono);padding:2px 7px;border:1px solid currentColor}
+.pill.ok{color:var(--ok)} .pill.bad{color:var(--warn)}
+#wave{width:100%;max-width:560px;aspect-ratio:1/1;display:block;border:1px solid var(--line);background:var(--paper);image-rendering:pixelated}
+.btn{font:600 13px var(--body);padding:8px 14px;border:1.5px solid var(--ink);background:var(--sheet);color:var(--ink);cursor:pointer}
+.btn:hover{background:var(--ink);color:var(--sheet)}
+
+/* drawings */
+.drawings{display:grid;grid-template-columns:1fr 1.25fr;gap:16px}
+@media (max-width:760px){.drawings{grid-template-columns:1fr}}
+.drawing{background:var(--sheet);border:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px}
+.drawing svg{width:100%;height:auto;display:block}
+svg .pn{fill:var(--fill);stroke:var(--ink);stroke-width:2}
+svg .pnw{fill:var(--wood);fill-opacity:.22;stroke:var(--ink);stroke-width:2}
+svg .ol{fill:none;stroke:var(--ink);stroke-width:2}
+svg .hid{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:8 6}
+svg .drv{fill:var(--sheet);stroke:var(--ink);stroke-width:2}
+svg .cone{fill:var(--fill);stroke:var(--ink);stroke-width:1.2}
+svg .dim{stroke:var(--accent);stroke-width:1.4;fill:none}
+svg .dimt{fill:var(--accent);font:600 22px var(--mono)}
+svg .lbl{fill:var(--ink);font:500 20px var(--body);stroke:var(--sheet);stroke-width:5px;paint-order:stroke;stroke-linejoin:round}
+svg .lbls{fill:var(--muted);font:500 17px var(--body);stroke:var(--sheet);stroke-width:5px;paint-order:stroke;stroke-linejoin:round}
+svg .air{stroke:var(--accent);stroke-width:2.5;fill:none}
+svg .stuff{fill:url(#dots)}
+svg .hatch{fill:url(#hatch)}
+svg .dotc{fill:var(--muted)}
+svg .hatchl{stroke:var(--muted);stroke-width:1.5}
+footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+
+<header class="titleblock">
+  <div class="tb-main">
+    <span class="label">Drawing set · 3-way vented floorstander · rev A</span>
+    <h1>TMW-27 Floorstander</h1>
+    <p>A tweeter–midrange–woofer speaker on a 27 cm wide baffle. I designed it from the published loudspeaker theory, then checked it with two simulators of my own: a lumped-parameter box model and a 2-D wave-equation solver. Both simulators are on this page so you can try your own changes.</p>
+    <nav class="toc" aria-label="Sections">
+      <a href="#research">Research</a><a href="#boxsim">Box simulator</a><a href="#wavesim">Wave simulator</a>
+      <a href="#drawings">Drawings</a><a href="#cutlist">Cut list</a><a href="#parts">Parts</a><a href="#build">Build</a><a href="#tune">Tuning</a>
+    </nav>
+  </div>
+  <div class="tb-side" aria-label="Key figures">
+    <div><span class="label">Bass −3 dB</span><b>31 Hz</b></div>
+    <div><span class="label">Top end</span><b>20 kHz</b></div>
+    <div><span class="label">Woofer box</span><b>46 L</b></div>
+    <div><span class="label">Port tune</span><b>27 Hz</b></div>
+    <div><span class="label">Crossovers</span><b>350 / 2600</b></div>
+    <div><span class="label">Size W×D×H</span><b class="mono" style="font-size:15px">270×340×1040</b></div>
+    <div><span class="label">Panels</span><b style="font-size:15px">18 mm birch ply</b></div>
+    <div><span class="label">Weight, each</span><b>≈ 28 kg</b></div>
+  </div>
+</header>
+
+<!-- ============================ RESEARCH ============================ -->
+<section id="research">
+  <div class="sec-head"><span class="label">Stage 1</span><h2>What the research says</h2></div>
+  <p>Music runs from about 20 Hz (wavelength 17 m) to 20 kHz (17 mm). No single driver covers a 1000:1 wavelength range well. Big cones move the air bass needs, but they beam and break up at high frequencies. Small domes spread treble evenly but cannot move enough air for bass. So the design splits the job into three bands and gives each driver a cabinet built for its band.</p>
+  <div class="cols">
+    <div class="sheet" style="display:flex;flex-direction:column;gap:10px">
+      <h3>Bass: Thiele &amp; Small</h3>
+      <p>Thiele (1961) and Small (1972–73) showed that a driver plus its box behaves as a high-pass filter. Its shape is set by a few driver numbers: Fs, Qts and Vas. A vented (bass-reflex) box adds a tuned air mass in a port, which works like a Helmholtz resonator. That extends bass about one octave lower than a sealed box of the same size. Small also gave limits on port air speed, beyond which the port makes noise.</p>
+    </div>
+    <div class="sheet" style="display:flex;flex-direction:column;gap:10px">
+      <h3>Cabinet shape: Olson</h3>
+      <p>Olson (1951) measured 12 cabinet shapes. Sharp box edges re-radiate sound and cause response ripples of several dB, and a centred driver on a symmetric baffle is the worst case. Rounded edges and an off-centre driver spread those reflections out. Separately, every cabinet loses up to 6 dB below the "baffle step" frequency (≈ 115 / width in metres), where the sound wraps around the box instead of going forward.</p>
+    </div>
+    <div class="sheet" style="display:flex;flex-direction:column;gap:10px">
+      <h3>Walls, ports and damping</h3>
+      <p>Harwood's work on cabinet panels shows that bracing and damping beat simply using thicker walls. Thick walls alone can store energy and ring longer. Port studies by Salvatti, Devantier and Button, and later by Bezzola, show that flared port ends cut turbulence noise and compression. They also show a best amount of flare, so more flare is not always better. A common noise limit is about 17 m/s air speed for flared ports.</p>
+    </div>
+  </div>
+  <div class="sheet tscroll">
+    <table>
+      <thead><tr><th>Experiment (my simulations)</th><th>Result</th><th>Design decision</th></tr></thead>
+      <tbody>
+        <tr><td>Woofer in a sealed 30 L / 46 L box</td><td class="n">F3 = 54 Hz</td><td>Too little bass for a floorstander</td></tr>
+        <tr class="hl"><td>Woofer in a vented 46 L box tuned to 27 Hz</td><td class="n">F3 = 27 Hz box alone, 31 Hz with the protective filter</td><td>Chosen. My optimiser found 48 L / 26.5 Hz, which matches Small's QB3 rule (≈ 43 L)</td></tr>
+        <tr><td>Vented 25 L box tuned to 40 Hz</td><td class="n">F3 = 37 Hz, +2.5 dB hump</td><td>Boomy one-note bass. Avoid small, high-tuned boxes</td></tr>
+        <tr><td>Port Ø51 / 64 / 76 / 102 mm at 60 W</td><td class="n">44 / 28 / 19.5 / 11 m/s</td><td>Ø76 mm flared, plus a 20 Hz LR4 subsonic filter. At 60 W that gives 14 m/s and 7.2 mm of cone travel, inside the limits</td></tr>
+        <tr><td>Panel first resonance, 18 mm side, unbraced</td><td class="n">MDF 262 Hz · birch 395 Hz</td><td>Both sit inside the woofer band, so the walls must be braced</td></tr>
+        <tr class="hl"><td>Same panel split into 3 bays by window braces</td><td class="n">birch 712–893 Hz</td><td>Above the 350 Hz woofer crossover, out of the woofer's band</td></tr>
+        <tr><td>2-D wave sim, high-frequency ripple, sharp edges</td><td class="n">σ = 1.03 dB</td><td>Baseline</td></tr>
+        <tr class="hl"><td>Same, with 20 mm / 40 mm roundover</td><td class="n">σ = 0.63 / 0.53 dB</td><td>Use a 25 mm roundover on the front edges (fits the 36 mm baffle)</td></tr>
+        <tr class="hl"><td>Same, with the tweeter 4 cm off-centre</td><td class="n">σ = 0.64 dB</td><td>Offset the tweeter 35 mm and build a mirror-image pair</td></tr>
+        <tr><td>3-way sum, LR4 at 350 Hz and 2.6 kHz, baffle-step shelf</td><td class="n">±0.6 dB, 40 Hz – 18 kHz</td><td>Active DSP crossover</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============================ BOX SIM ============================ -->
+<section id="boxsim">
+  <div class="sec-head"><span class="label">Stage 2</span><h2>Box simulator</h2></div>
+  <p>This is the same electro-mechanical model as <span class="mono">simulator/speaker_model.py</span> in the repository, rewritten in JavaScript. Type in the numbers from your woofer's datasheet. The model includes voice-coil inductance, box leakage (QL = 7), absorption and port losses. Excursion and port speed are calculated at the power you set. The subsonic filter is on by default, because the finished speaker uses one.</p>
+  <div class="sheet sim">
+    <div class="controls">
+      <div class="ctl"><span class="label">Woofer preset</span>
+        <select id="preset">
+          <option value="rs225">8 in, RS225-8 class (nominal)</option>
+          <option value="g65">6.5 in, generic (example)</option>
+          <option value="g10">10 in, generic (example)</option>
+        </select></div>
+      <div class="ts" aria-label="Thiele-Small parameters">
+        <label>Fs Hz<input id="fs" type="number" step="0.5"></label>
+        <label>Qms<input id="qms" type="number" step="0.05"></label>
+        <label>Qes<input id="qes" type="number" step="0.01"></label>
+        <label>Vas L<input id="vas" type="number" step="0.5"></label>
+        <label>Re Ω<input id="re" type="number" step="0.1"></label>
+        <label>Le mH<input id="le" type="number" step="0.05"></label>
+        <label>Sd cm²<input id="sd" type="number" step="1"></label>
+        <label>Xmax mm<input id="xmax" type="number" step="0.1"></label>
+        <label>Pe W<input id="pe" type="number" step="5"></label>
+      </div>
+      <div class="ctl"><span class="label">Box type</span>
+        <div class="seg" role="group" aria-label="Box type"><button id="tVent" aria-pressed="true">Vented</button><button id="tSeal" aria-pressed="false">Sealed</button></div></div>
+      <div class="ctl"><div class="row"><span class="label">Net volume</span><output id="vbO"></output></div><input id="vb" type="range" min="10" max="120" step="1" value="46"></div>
+      <div class="ctl" id="fbRow"><div class="row"><span class="label">Port tuning</span><output id="fbO"></output></div><input id="fb" type="range" min="18" max="60" step="0.5" value="27"></div>
+      <div class="ctl" id="pdRow"><div class="row"><span class="label">Port diameter</span><output id="pdO"></output></div><input id="pd" type="range" min="40" max="120" step="1" value="76"></div>
+      <div class="ctl"><div class="row"><span class="label">Drive power</span><output id="pwO"></output></div><input id="pw" type="range" min="1" max="200" step="1" value="60"></div>
+      <div class="ctl"><div class="row"><span class="label">Baffle-step loss (before DSP fix)</span><output id="bwO"></output></div><input id="bw" type="range" min="0" max="60" step="1" value="0"></div>
+      <div class="ctl"><span class="label">Subsonic filter (DSP)</span>
+        <div class="seg" role="group" aria-label="Subsonic filter"><button id="hpOn" aria-pressed="true">20 Hz LR4</button><button id="hpOff" aria-pressed="false">Off</button></div></div>
+      <button class="btn" id="opt" type="button">Find flattest deep-bass box</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+      <div class="readout" aria-live="polite">
+        <div><span class="label">F3 (−3 dB)</span><b id="rF3">–</b></div>
+        <div><span class="label">Port length</span><b id="rPL">–</b></div>
+        <div><span class="label">Peak excursion</span><b id="rX">–</b></div>
+        <div><span class="label">Peak port speed</span><b id="rV">–</b></div>
+        <div><span class="label">Sensitivity</span><b id="rS">–</b></div>
+      </div>
+      <div class="charts">
+        <div class="chart"><span class="label">SPL @ 2.83 V, 1 m · dashed = sealed, same volume</span><canvas id="cSPL"></canvas></div>
+        <div class="chart"><span class="label">Cone excursion at drive power · red = Xmax</span><canvas id="cX"></canvas></div>
+        <div class="chart"><span class="label">Port air speed · red = 17 m/s noise limit</span><canvas id="cV"></canvas></div>
+        <div class="chart"><span class="label">Impedance · the dip between peaks is the tuning</span><canvas id="cZ"></canvas></div>
+      </div>
+      <p class="note" id="advice"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ WAVE SIM ============================ -->
+<section id="wavesim">
+  <div class="sec-head"><span class="label">Stage 3</span><h2>Wave simulator</h2></div>
+  <p>This is a live 2-D finite-difference solution of the acoustic wave equation, looking down on the cabinet from above. A tweeter on the front baffle plays a steady tone. Blue is compression and amber is rarefaction. Watch for a second, weaker set of rings starting at each front corner. That is edge diffraction, and it adds to or cancels the direct sound depending on where you listen.</p>
+  <div class="sheet sim">
+    <div class="controls">
+      <div class="ctl"><div class="row"><span class="label">Tone</span><output id="wfO"></output></div><input id="wf" type="range" min="300" max="3500" step="50" value="1500"></div>
+      <div class="ctl"><span class="label">Front edges</span>
+        <div class="seg" role="group" aria-label="Edge shape"><button data-r="0" aria-pressed="true">Sharp</button><button data-r="0.025" aria-pressed="false">25 mm</button><button data-r="0.05" aria-pressed="false">50 mm</button></div></div>
+      <div class="ctl"><span class="label">Tweeter position</span>
+        <div class="seg" role="group" aria-label="Tweeter position"><button data-o="0" aria-pressed="true">Centred</button><button data-o="0.035" aria-pressed="false">35 mm offset</button></div></div>
+      <div style="display:flex;gap:8px"><button class="btn" id="wPlay" type="button">Pause</button><button class="btn" id="wReset" type="button">Restart</button></div>
+      <p class="label" style="text-transform:none;letter-spacing:0">Grid 6 mm · 1.56 m square · cabinet 270 × 340 mm · edges absorb outgoing waves</p>
+    </div>
+    <div style="min-width:0"><canvas id="wave" width="260" height="260" aria-label="Animated pressure field around the cabinet"></canvas></div>
+  </div>
+</section>
+
+<!-- ============================ DRAWINGS ============================ -->
+<section id="drawings">
+  <div class="sec-head"><span class="label">Stage 4</span><h2>Drawings</h2></div>
+  <p>All dimensions are in millimetres and drawn to scale. Build one cabinet as drawn and the second as its mirror image, with the tweeter offset toward the inner edge of each speaker. Check every driver cut-out and position against the drawings of the drivers you actually buy before cutting.</p>
+  <div class="drawings">
+    <figure class="drawing" style="margin:0">
+      <span class="label">A · Front view</span>
+      <svg viewBox="-95 -80 450 1240" role="img" aria-label="Front view of cabinet with driver positions">
+        <rect class="pn" x="0" y="0" width="270" height="1040" rx="6"/>
+        <rect class="hid" x="25" y="25" width="220" height="990"/>
+        <line class="hid" x1="0" y1="252" x2="270" y2="252"/><line class="hid" x1="0" y1="270" x2="270" y2="270"/>
+        <line class="hid" x1="0" y1="540" x2="270" y2="540"/><line class="hid" x1="0" y1="780" x2="270" y2="780"/>
+        <!-- tweeter -->
+        <circle class="drv" cx="170" cy="80" r="52"/><circle class="cone" cx="170" cy="80" r="17"/>
+        <!-- mid -->
+        <circle class="drv" cx="135" cy="195" r="53"/><circle class="cone" cx="135" cy="195" r="40"/><circle class="drv" cx="135" cy="195" r="13"/>
+        <!-- woofer -->
+        <circle class="drv" cx="135" cy="385" r="115"/><circle class="cone" cx="135" cy="385" r="92"/><circle class="drv" cx="135" cy="385" r="32"/>
+        <!-- feet + plinth -->
+        <rect class="pn" x="12" y="1040" width="34" height="40"/><rect class="pn" x="224" y="1040" width="34" height="40"/>
+        <rect class="pnw" x="-15" y="1080" width="300" height="25"/>
+        <!-- dims -->
+        <g class="dim"><line x1="0" y1="-40" x2="270" y2="-40"/><line x1="0" y1="-52" x2="0" y2="-28"/><line x1="270" y1="-52" x2="270" y2="-28"/></g>
+        <text class="dimt" x="135" y="-50" text-anchor="middle">270</text>
+        <g class="dim"><line x1="-45" y1="0" x2="-45" y2="1040"/><line x1="-57" y1="0" x2="-33" y2="0"/><line x1="-57" y1="1040" x2="-33" y2="1040"/></g>
+        <text class="dimt" transform="translate(-55 520) rotate(-90)" text-anchor="middle">1040</text>
+        <g class="dim"><line x1="300" y1="0" x2="300" y2="385"/><line x1="290" y1="0" x2="312" y2="0"/>
+          <line x1="225" y1="80" x2="312" y2="80"/><line x1="190" y1="195" x2="312" y2="195"/><line x1="252" y1="385" x2="312" y2="385"/></g>
+        <text class="dimt" x="318" y="88">80</text><text class="dimt" x="318" y="203">195</text><text class="dimt" x="318" y="393">385</text>
+        <g class="dim"><line x1="135" y1="12" x2="170" y2="12"/><line x1="135" y1="4" x2="135" y2="20"/><line x1="170" y1="4" x2="170" y2="20"/></g>
+        <text class="dimt" x="178" y="20" style="font-size:18px">35</text>
+        <text class="lbls" x="135" y="560" text-anchor="middle">brace (hidden)</text>
+        <text class="lbls" x="135" y="1010" text-anchor="middle">25 mm roundover line</text>
+        <text class="lbl" x="135" y="1135" text-anchor="middle">plinth 300 × 380 × 25</text>
+      </svg>
+      <span class="label" style="text-transform:none;letter-spacing:0">Driver centres measured from the top edge. The tweeter is offset 35 mm from the centre line.</span>
+    </figure>
+
+    <figure class="drawing" style="margin:0">
+      <span class="label">B · Side section</span>
+      <svg viewBox="-95 -80 600 1240" role="img" aria-label="Side section showing chambers, braces and port">
+        <defs>
+          <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle class="dotc" cx="4" cy="4" r="1.6"/><circle class="dotc" cx="11" cy="11" r="1.6"/></pattern>
+          <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line class="hatchl" x1="0" y1="0" x2="0" y2="10"/></pattern>
+        </defs>
+        <!-- mid chamber fill -->
+        <rect class="stuff" x="36" y="18" width="286" height="234"/>
+        <!-- woofer chamber lining -->
+        <rect class="hatch" x="297" y="270" width="25" height="752"/>
+        <rect class="hatch" x="36" y="1000" width="110" height="22"/><rect class="hatch" x="265" y="1000" width="32" height="22"/>
+        <!-- panels -->
+        <rect class="pnw" x="0" y="0" width="18" height="1040"/><rect class="pnw" x="18" y="0" width="18" height="1040"/>
+        <rect class="pnw" x="322" y="0" width="18" height="1040"/>
+        <rect class="pnw" x="36" y="0" width="286" height="18"/>
+        <rect class="pnw" x="36" y="252" width="286" height="18"/>
+        <rect class="pnw" x="36" y="1022" width="286" height="18"/>
+        <rect class="pnw" x="36" y="540" width="43" height="18"/><rect class="pnw" x="279" y="540" width="43" height="18"/>
+        <rect class="pnw" x="36" y="780" width="43" height="18"/><rect class="pnw" x="279" y="780" width="43" height="18"/>
+        <line class="hid" x1="79" y1="549" x2="279" y2="549"/><line class="hid" x1="79" y1="789" x2="279" y2="789"/>
+        <!-- tweeter body -->
+        <rect class="drv" x="36" y="55" width="38" height="50"/>
+        <!-- mid -->
+        <path class="drv" d="M36 148 L92 178 L92 212 L36 242 Z"/><rect class="drv" x="92" y="181" width="26" height="28"/>
+        <!-- woofer -->
+        <path class="drv" d="M36 292 L128 352 L128 418 L36 478 Z"/><rect class="drv" x="128" y="357" width="44" height="56"/>
+        <!-- port -->
+        <rect class="pn" x="165" y="691" width="82" height="349"/>
+        <rect x="168" y="691" width="76" height="349" fill="var(--sheet)"/>
+        <path class="ol" d="M168 691 V1022 Q168 1040 150 1040 M244 691 V1022 Q244 1040 262 1040"/>
+        <!-- feet + plinth -->
+        <rect class="pn" x="12" y="1040" width="34" height="40"/><rect class="pn" x="294" y="1040" width="34" height="40"/>
+        <rect class="pnw" x="-20" y="1080" width="380" height="25"/>
+        <!-- airflow -->
+        <path class="air" d="M206 990 V1058 M206 1060 Q206 1062 150 1062 L80 1062 M206 1060 Q206 1062 262 1062 L290 1062"/>
+        <path class="air" d="M80 1062 l12 -7 M80 1062 l12 7 M290 1062 l-12 -7 M290 1062 l-12 7"/>
+        <!-- dims -->
+        <g class="dim"><line x1="0" y1="-40" x2="340" y2="-40"/><line x1="0" y1="-52" x2="0" y2="-28"/><line x1="340" y1="-52" x2="340" y2="-28"/></g>
+        <text class="dimt" x="170" y="-50" text-anchor="middle">340</text>
+        <g class="dim"><line x1="370" y1="18" x2="370" y2="252"/><line x1="360" y1="18" x2="382" y2="18"/><line x1="360" y1="252" x2="382" y2="252"/>
+          <line x1="370" y1="270" x2="370" y2="1022"/><line x1="360" y1="270" x2="382" y2="270"/><line x1="360" y1="1022" x2="382" y2="1022"/>
+          <line x1="440" y1="691" x2="440" y2="1040"/><line x1="430" y1="691" x2="452" y2="691"/><line x1="430" y1="1040" x2="452" y2="1040"/>
+          <line x1="250" y1="691" x2="430" y2="691" stroke-dasharray="4 4"/>
+          <line x1="-45" y1="1040" x2="-45" y2="1080"/><line x1="-57" y1="1040" x2="-33" y2="1040"/><line x1="-57" y1="1080" x2="-33" y2="1080"/></g>
+        <text class="dimt" x="390" y="142">234</text>
+        <text class="dimt" x="390" y="610">752</text>
+        <text class="dimt" x="458" y="872">349</text>
+        <text class="dimt" x="-90" y="1068">40</text>
+        <!-- labels -->
+        <text class="lbl" x="110" y="130">mid chamber</text><text class="lbls" x="110" y="152">15.7 L, fully filled</text>
+        <text class="lbl" x="150" y="470">woofer chamber</text><text class="lbls" x="150" y="492">45.9 L net</text>
+        <text class="lbls" x="90" y="535">window brace</text>
+        <text class="lbls" x="90" y="775">window brace</text>
+        <text class="lbl" x="175" y="680">port Ø76</text>
+        <text class="lbls" x="200" y="248">divider</text>
+        <text class="lbls" x="290" y="640" text-anchor="end">25 mm lining</text>
+        <text class="lbls" x="-8" y="-62">36 baffle</text>
+        <text class="lbl" x="170" y="1135" text-anchor="middle">port fires into the 40 mm gap</text>
+      </svg>
+      <span class="label" style="text-transform:none;letter-spacing:0">Section through the centre line. Front is on the left.</span>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ CUT LIST ============================ -->
+<section id="cutlist">
+  <div class="sec-head"><span class="label">Stage 5</span><h2>Cut list (one speaker)</h2></div>
+  <div class="sheet tscroll">
+    <table>
+      <thead><tr><th>Part</th><th>Qty</th><th>Size (mm)</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Front baffle, outer layer</td><td class="n">1</td><td class="n">270 × 1040 × 18</td><td>Flush recesses for the driver flanges. 25 mm roundover on all four front edges after gluing</td></tr>
+        <tr><td>Front baffle, inner layer</td><td class="n">1</td><td class="n">270 × 1040 × 18</td><td>Same holes. Chamfer the back of the woofer and mid holes 45° so air can flow freely behind the cone</td></tr>
+        <tr><td>Side panels</td><td class="n">2</td><td class="n">304 × 1040 × 18</td><td>Glued to the back face of the baffle</td></tr>
+        <tr><td>Back panel</td><td class="n">1</td><td class="n">234 × 1040 × 18</td><td>Fits between the sides. Holes for 3 terminal pairs (or one Speakon socket) in the woofer chamber</td></tr>
+        <tr><td>Top, bottom, divider</td><td class="n">3</td><td class="n">234 × 286 × 18</td><td>The bottom has a 76 mm port hole, rounded underneath. The divider must be airtight</td></tr>
+        <tr><td>Window braces</td><td class="n">2</td><td class="n">234 × 286 × 18</td><td>Cut a 170 × 200 window. The lower brace window holds the port tube</td></tr>
+        <tr><td>Plinth</td><td class="n">1</td><td class="n">300 × 380 × 25</td><td>Ply or MDF, with spikes or rubber feet underneath</td></tr>
+        <tr><td>Spacer blocks</td><td class="n">4</td><td class="n">34 × 34 × 40</td><td>Hardwood. They make the 40 mm gap the port fires into</td></tr>
+        <tr><td>Port tube</td><td class="n">1</td><td class="n">Ø76 ID × 360</td><td>Cut long, then trim to 349 mm while tuning. Use a flared tube, or PVC with a routed flare</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Sheet stock: one 1220 × 2440 mm sheet of 18 mm ply covers about one speaker. Buy two sheets for the pair, plus a small piece of 25 mm board for the plinths.</p>
+</section>
+
+<!-- ============================ PARTS ============================ -->
+<section id="parts">
+  <div class="sec-head"><span class="label">Stage 6</span><h2>Wood, drivers and electronics</h2></div>
+  <div class="cols">
+    <div class="sheet" style="display:flex;flex-direction:column;gap:10px">
+      <h3>Wood</h3>
+      <ul>
+        <li><b>Best: 18 mm Baltic birch plywood</b>, void-free with 13 plies. It is stiffer than MDF (the simulation gives 395 vs 262 Hz for the same panel) and holds screws well. It also copes with humidity much better than MDF, which swells if it gets damp.</li>
+        <li><b>Budget: 18–19 mm MDF.</b> MDF is acoustically fine if you brace it as drawn and add damping. Seal every edge with paint or lacquer in humid climates.</li>
+        <li>Avoid particleboard and solid pine. Particleboard is weak, and solid pine moves with the seasons, which breaks the air seals.</li>
+        <li>Use a hardwood veneer, oil or paint for the finish. Your choice of finish makes no audible difference.</li>
+      </ul>
+    </div>
+    <div class="sheet" style="display:flex;flex-direction:column;gap:10px">
+      <h3>Drivers (per speaker)</h3>
+      <ul>
+        <li><b>Woofer 8 in:</b> Dayton Audio RS225-8. Alternatives: SB Acoustics SB23 series, Scan-Speak 22W series.</li>
+        <li><b>Midrange 4 in:</b> Dayton Audio RS100-8 or an SB Acoustics SB12 midrange. It only has to play 350 Hz – 2.6 kHz.</li>
+        <li><b>Tweeter 1 in:</b> SB Acoustics SB26STAC-C000-4 or Dayton Audio RST28F-4. Pick one with Fs under 800 Hz so it handles a 2.6 kHz crossover easily.</li>
+      </ul>
+      <p class="note warn">The woofer numbers I used are nominal datasheet-style values. Before you cut wood, type the real datasheet values into the box simulator above. If they differ, it will give you a new volume and port length.</p>
+    </div>
+    <div class="sheet" style="display:flex;flex-direction:column;gap:10px">
+      <h3>Electronics</h3>
+      <ul>
+        <li><b>Simplest high end:</b> one 3-channel DSP plate amplifier per speaker, such as the Hypex FusionAmp FA253. The crossover, EQ and amplifiers are in one box.</li>
+        <li><b>Budget:</b> a Dayton Audio DSP-408 (4 in, 8 out) with a 6-channel class-D amp. Or one ADAU1701-based 4-channel DSP amp board per speaker, using 3 of its channels.</li>
+        <li><b>Measurement:</b> a calibrated USB mic (miniDSP UMIK-1) with the free REW software. A Dayton DATS V3 is optional, for measuring driver parameters and port tuning.</li>
+        <li><b>Wiring:</b> 1.5 mm² (16 AWG) copper, three terminal pairs (or a Speakon socket), gold or nickel binding posts.</li>
+      </ul>
+    </div>
+    <div class="sheet" style="display:flex;flex-direction:column;gap:10px">
+      <h3>Assembly supplies</h3>
+      <ul>
+        <li>PVA wood glue (Titebond II or III), clamps, brad nails or screws for alignment.</li>
+        <li>Damping: self-adhesive butyl or bitumen pads, 2–3 mm, on the side and back panels of the woofer chamber.</li>
+        <li>Absorption: 25 mm polyester or wool felt on the woofer chamber walls. Loose polyester fibre or sheep's wool to fill the mid chamber.</li>
+        <li>M5 T-nuts with hex bolts for the drivers (screws in wood strip out), foam gasket tape, and acrylic sealant for the joints.</li>
+        <li>A 76 mm flared port tube, a router with a 25 mm roundover bit, a circle jig, and spikes or feet.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BUILD ============================ -->
+<section id="build">
+  <div class="sec-head"><span class="label">Stage 7</span><h2>Build order</h2></div>
+  <div class="sheet">
+    <ol>
+      <li>Cut all panels square. Lay the two baffle layers together and drill a pilot hole at each driver centre (80, 195 and 385 mm from the top, tweeter 35 mm off-centre). Mirror the tweeter offset on the second speaker.</li>
+      <li>Rout the driver holes with a circle jig, then the flange recesses in the outer layer only. Glue the two layers into one 36 mm baffle and clamp them overnight.</li>
+      <li>Chamfer the back of the woofer and mid holes at 45° so the inner layer does not choke the airflow behind the cone.</li>
+      <li>Glue the sides to the baffle, then fit the top, divider, two window braces and bottom at the heights on drawing B. Fit the back last. Run a bead of sealant along every inside joint, especially around the divider, because the two chambers must not leak into each other.</li>
+      <li>Fit the port tube through the bottom panel and the lower brace window, and glue it in. Round the hole on the underside of the bottom panel (about 18 mm radius).</li>
+      <li>Apply the damping pads to the side and back walls of the woofer chamber, and line them with 25 mm felt. Keep 76 mm clear around the inner end of the port. Fill the mid chamber loosely with wool or polyester.</li>
+      <li>Rout the 25 mm roundover on the front vertical edges and the top front edge. Sand and finish the cabinet.</li>
+      <li>Run the wires: woofer and mid through a sealed hole in the divider, tweeter alongside. Fill every wire hole with hot glue or sealant. Fit the terminals, gasket tape and T-nuts, then mount the drivers.</li>
+      <li>Put the cabinet on its four spacer blocks and the plinth. The 40 mm gap must stay open on all sides.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================ TUNING ============================ -->
+<section id="tune">
+  <div class="sec-head"><span class="label">Stage 8</span><h2>Tuning with DSP</h2></div>
+  <div class="cols">
+    <div class="sheet tscroll">
+      <table>
+        <thead><tr><th>Channel</th><th>Filters</th></tr></thead>
+        <tbody>
+          <tr><td>Woofer</td><td>High-pass 20 Hz LR 24 dB/oct (subsonic, protects the woofer) · low-pass 350 Hz LR 24 dB/oct · low shelf +3 to +6 dB at ~425 Hz</td></tr>
+          <tr><td>Mid</td><td>High-pass 350 Hz LR 24 dB/oct · low-pass 2600 Hz LR 24 dB/oct</td></tr>
+          <tr><td>Tweeter</td><td>High-pass 2600 Hz LR 24 dB/oct · gain about −4 to −6 dB to level-match</td></tr>
+          <tr><td>All</td><td>Same polarity · delay the tweeter and mid so they line up in time with the woofer (measure it)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sheet" style="display:flex;flex-direction:column;gap:10px">
+      <ol>
+        <li><b>Check the port tuning.</b> Measure the impedance. The dip between the two bass peaks should sit at 27 Hz. If it is higher, the port is too short. If it is lower, trim 5 mm at a time.</li>
+        <li><b>Set the levels.</b> Measure each driver alone at 1 m on the tweeter axis with REW. Set the gains so all three bands match.</li>
+        <li><b>Set the delays.</b> Use REW's impulse alignment. The tweeter usually needs about 0.1–0.3 ms of delay.</li>
+        <li><b>Set the baffle-step shelf.</b> Use +6 dB if the speakers stand far from walls, or +3 to +4 dB if they are 30–60 cm from the back wall.</li>
+        <li><b>Correct the room.</b> Measure at your listening seat and only cut peaks below 300 Hz. Leave the treble alone.</li>
+        <li><b>Place the speakers.</b> Put them 50–80 cm from the back wall, toed in toward the listener, in an equilateral triangle with your seat.</li>
+      </ol>
+    </div>
+  </div>
+  <p class="note">The 27 Hz figure is measured in free space. In a normal room, the walls usually add bass below about 60 Hz, so it will sound fuller than the model. For flat output down to 20 Hz at concert levels, add a subwoofer later. The DSP already has spare outputs for one.</p>
+</section>
+
+<section id="sources">
+  <div class="sec-head"><span class="label">References</span><h2>Sources</h2></div>
+  <div class="sheet">
+    <ul>
+      <li>R. H. Small, "Vented-Box Loudspeaker Systems", JAES 21 (1973), Parts 1–4: <a href="https://aes2.org/publications/elibrary-page/?id=1941" target="_blank" rel="noopener">AES e-library</a></li>
+      <li>N. Thiele, "The loudspeaker parameters and their evolution": <a href="https://www.ioa.org.uk/system/files/proceedings/n_thiele_the_loudspeaker_parameters_and_their_evolution.pdf" target="_blank" rel="noopener">IOA proceedings</a></li>
+      <li>H. F. Olson, "Direct Radiator Loudspeaker Enclosures" (1951), discussed in Stereophile, <a href="https://www.stereophile.com/reference/704cutting/index.html" target="_blank" rel="noopener">"Cutting Corners"</a></li>
+      <li>Purifi, <a href="https://purifi-audio.com/blog/tech-notes-1/what-is-the-baffle-step-20" target="_blank" rel="noopener">"What is the baffle step"</a></li>
+      <li>Salvatti, Devantier, Button, <a href="https://jahonen.kapsi.fi/Audio/Papers/AES_PortPaper.pdf" target="_blank" rel="noopener">"Maximizing Performance from Loudspeaker Ports"</a> (AES)</li>
+      <li>Bezzola, <a href="https://www.comsol.com//paper/download/679311/bezzola_paper.pdf" target="_blank" rel="noopener">"Optimal Bass Reflex Loudspeaker Port Design"</a> (COMSOL conference)</li>
+      <li>Genelec, <a href="https://genelec.com/key-technologies/reflex-port-design" target="_blank" rel="noopener">Reflex port design</a></li>
+      <li>Cabinet panel resonance and bracing: <a href="https://diyaudio.com/archive/oldwiki/index.php@page=Cabinet+Bracing.html" target="_blank" rel="noopener">diyAudio bracing notes</a> (citing Harwood and Iverson), and the <a href="https://www.headphonesty.com/2026/07/engineers-build-six-figure-speakers-cheap-material/" target="_blank" rel="noopener">Headphonesty article on MDF and plywood tests</a></li>
+    </ul>
+  </div>
+</section>
+
+<footer>All simulations are idealised: driver cone breakup, room acoustics and 3-D diffraction are not modelled, and the 2-D wave solver is meant for comparing shapes. Measure the finished speaker and tune it in the room.</footer>
+</div>
+
+<script>
+(()=>{
+"use strict";
+const RHO=1.204,C=343,TAU=2*Math.PI;
+const $=id=>document.getElementById(id);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- complex helpers ---------- */
+const cx=(r,i=0)=>({r,i});
+const add=(a,b)=>cx(a.r+b.r,a.i+b.i);
+const mul=(a,b)=>cx(a.r*b.r-a.i*b.i,a.r*b.i+a.i*b.r);
+const div=(a,b)=>{const d=b.r*b.r+b.i*b.i;return cx((a.r*b.r+a.i*b.i)/d,(a.i*b.r-a.r*b.i)/d)};
+const inv=a=>div(cx(1),a);
+const sc=(a,k)=>cx(a.r*k,a.i*k);
+const abs=a=>Math.hypot(a.r,a.i);
+
+/* ---------- presets ---------- */
+const PRESETS={
+  rs225:{fs:28,qms:2.45,qes:0.47,vas:42.5,re:7.2,le:0.7,sd:214,xmax:7.3,pe:80},
+  g65:{fs:35,qms:3.2,qes:0.42,vas:24,re:5.8,le:0.5,sd:133,xmax:6,pe:60},
+  g10:{fs:24,qms:4,qes:0.4,vas:85,re:6.2,le:1.1,sd:340,xmax:9,pe:150}
+};
+const TS=["fs","qms","qes","vas","re","le","sd","xmax","pe"];
+function loadPreset(k){const p=PRESETS[k];TS.forEach(t=>$(t).value=p[t]);}
+loadPreset("rs225");
+let vented=true,hpOn=true;
+
+function driver(){
+  const d={};TS.forEach(t=>d[t]=parseFloat($(t).value)||0);
+  d.vasm=d.vas/1000;d.sdm=d.sd/1e4;d.lem=d.le/1000;
+  const ws=TAU*d.fs;
+  d.cms=d.vasm/(RHO*C*C*d.sdm*d.sdm);d.mms=1/(ws*ws*d.cms);
+  d.rms=ws*d.mms/d.qms;d.bl=Math.sqrt(ws*d.mms*d.re/d.qes);
+  d.qts=d.qms*d.qes/(d.qms+d.qes);
+  d.sens=112.1+10*Math.log10((4*Math.PI*Math.PI/C**3)*d.fs**3*d.vasm/d.qes);
+  return d;
+}
+const FREQS=Array.from({length:300},(_,k)=>10*Math.pow(100,k/299)); // 10 Hz – 1 kHz
+
+function simulate(d,isVent,vbL,fb,pdm,volts,bw,hp){
+  const vb=vbL/1000,cab=vb/(RHO*C*C),sp=Math.PI*(pdm/2)**2;
+  const wb=isVent?TAU*fb:TAU*d.fs*Math.sqrt(1+d.vasm/vb);
+  const map=isVent?1/(wb*wb*cab):0;
+  const rab=1/(100*wb*cab),ral=7/(wb*cab),rap=isVent?wb*map/60:0;
+  const out={spl:[],x:[],v:[],z:[]};
+  for(const f of FREQS){
+    const w=TAU*f;
+    const zms=cx(d.rms,w*d.mms-1/(w*d.cms));
+    let y=add(inv(cx(rab,-1/(w*cab))),cx(1/ral));
+    let zport=null;
+    if(isVent){zport=cx(rap,w*map);y=add(y,inv(zport));}
+    const zbox=inv(y);
+    const ze=cx(d.re,w*d.lem);
+    const zmt=add(zms,sc(zbox,d.sdm*d.sdm));
+    const zin=add(ze,div(cx(d.bl*d.bl),zmt));
+    let vin=cx(volts);
+    if(hp){const s=cx(0,f/20),b=inv(add(add(mul(s,s),sc(s,Math.SQRT2)),cx(1))),h=mul(mul(s,s),b);vin=mul(vin,mul(h,h));}
+    const i=div(vin,zin);
+    const u=div(sc(i,d.bl),zmt);
+    const pbox=sc(mul(u,zbox),-d.sdm);
+    let ut=add(sc(u,d.sdm),sc(pbox,1/ral));
+    let up=cx(0);
+    if(isVent){up=div(pbox,zport);ut=add(ut,up);}
+    let p=sc(mul(cx(0,w),ut),RHO/(TAU*1));
+    if(bw>0){const f3=115/bw,s=cx(0,f/f3);p=mul(p,div(add(cx(1),s),add(cx(2),s)));}
+    out.spl.push(20*Math.log10(abs(p)/20e-6));
+    out.x.push(abs(u)/w*Math.SQRT2*1000);
+    out.v.push(isVent?abs(up)/sp*Math.SQRT2:0);
+    out.z.push(abs(zin));
+  }
+  return out;
+}
+function f3of(spl){
+  const ref=refLevel(spl);
+  let f3=FREQS[0];
+  for(let k=0;k<FREQS.length;k++){if(FREQS[k]>200)break;if(spl[k]<ref-3)f3=FREQS[k];}
+  return f3;
+}
+function refLevel(spl){let s=0,n=0;FREQS.forEach((f,k)=>{if(f>200&&f<600){s+=spl[k];n++}});return s/n;}
+
+/* ---------- plotting ---------- */
+function plot(cv,series,opt){
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
+  if(!W)return;
+  cv.width=W*dpr;cv.height=H*dpr;const g=cv.getContext("2d");g.scale(dpr,dpr);
+  const L=40,R=8,T=8,B=22,pw=W-L-R,ph=H-T-B;
+  const fx=f=>L+pw*Math.log(f/10)/Math.log(100);
+  const fy=v=>T+ph*(1-(v-opt.y0)/(opt.y1-opt.y0));
+  g.font="10px "+css("--mono").split(",")[0];g.lineWidth=1;
+  g.strokeStyle=css("--line");g.fillStyle=css("--muted");
+  [10,20,50,100,200,500,1000].forEach(f=>{const x=fx(f);g.beginPath();g.moveTo(x,T);g.lineTo(x,T+ph);g.stroke();
+    g.textAlign="center";g.fillText(f>=1000?"1k":f,x,H-6);});
+  for(let k=0;k<=4;k++){const v=opt.y0+(opt.y1-opt.y0)*k/4,y=fy(v);g.beginPath();g.moveTo(L,y);g.lineTo(L+pw,y);g.stroke();
+    g.textAlign="right";g.fillText(Math.round(v),L-5,y+3);}
+  g.save();g.beginPath();g.rect(L,T,pw,ph);g.clip();
+  (opt.hlines||[]).forEach(h=>{g.strokeStyle=css("--warn");g.setLineDash([5,4]);g.beginPath();g.moveTo(L,fy(h));g.lineTo(L+pw,fy(h));g.stroke();g.setLineDash([]);});
+  series.forEach(s=>{
+    g.strokeStyle=css(s.color);g.lineWidth=s.w||2;g.setLineDash(s.dash||[]);g.beginPath();
+    s.y.forEach((v,k)=>{const X=fx(FREQS[k]),Y=fy(v);k?g.lineTo(X,Y):g.moveTo(X,Y);});g.stroke();g.setLineDash([]);
+    if(s.fill){g.lineTo(fx(1000),T+ph);g.lineTo(fx(10),T+ph);g.closePath();g.globalAlpha=.08;g.fillStyle=css(s.color);g.fill();g.globalAlpha=1;}
+  });
+  g.restore();
+}
+function portLen(vbL,fb,pdm){const sp=Math.PI*(pdm/2)**2;return C*C*sp/((TAU*fb)**2*(vbL/1000))-0.732*pdm;}
+
+function update(){
+  const d=driver();
+  const vb=+$("vb").value,fb=+$("fb").value,pd=+$("pd").value/1000,pw=+$("pw").value,bw=+$("bw").value/100;
+  $("vbO").textContent=vb+" L";$("fbO").textContent=fb+" Hz";$("pdO").textContent=Math.round(pd*1000)+" mm";
+  $("pwO").textContent=pw+" W";$("bwO").textContent=bw?Math.round(bw*100)+" cm":"off";
+  $("fbRow").hidden=!vented;$("pdRow").hidden=!vented;
+  const r=simulate(d,vented,vb,fb,pd,2.83,bw,hpOn);
+  const rs=simulate(d,false,vb,fb,pd,2.83,bw,hpOn);
+  const vP=Math.sqrt(pw*d.re);
+  const rp=simulate(d,vented,vb,fb,pd,vP,0,hpOn);
+  const ref=refLevel(r.spl);
+  const f3=f3of(r.spl);
+  const xMax=Math.max(...rp.x),vMax=Math.max(...rp.v);
+  const pl=portLen(vb,fb,pd);
+  $("rF3").textContent=Math.round(f3)+" Hz";
+  $("rPL").textContent=vented?(pl>0?Math.round(pl*1000)+" mm":"too short"):"sealed";
+  $("rX").innerHTML=xMax.toFixed(1)+" mm <span class='pill "+(xMax<=d.xmax?"ok":"bad")+"'>"+(xMax<=d.xmax?"OK":"over")+"</span>";
+  $("rV").innerHTML=vented?vMax.toFixed(1)+" m/s <span class='pill "+(vMax<=17?"ok":"bad")+"'>"+(vMax<=17?"quiet":"noisy")+"</span>":"–";
+  $("rS").textContent=d.sens.toFixed(1)+" dB";
+  plot($("cSPL"),[{y:rs.spl,color:"--muted",dash:[5,4],w:1.5},{y:r.spl,color:"--accent",fill:true}],{y0:Math.round(ref)-30,y1:Math.round(ref)+10});
+  plot($("cX"),[{y:rp.x,color:"--accent"}],{y0:0,y1:Math.max(d.xmax*2.5,5),hlines:[d.xmax]});
+  plot($("cV"),[{y:rp.v,color:"--accent"}],{y0:0,y1:40,hlines:[17]});
+  plot($("cZ"),[{y:r.z,color:"--wood"}],{y0:0,y1:Math.ceil(Math.max(...r.z)/10)*10});
+  // advice
+  let tips=[];
+  let hump=0;FREQS.forEach((f,k)=>{if(f>1.5*f3&&f<300)hump=Math.max(hump,r.spl[k]-ref)});
+  if(hump>1)tips.push(`The response peaks ${hump.toFixed(1)} dB above the midrange level, which will sound boomy. Use a bigger box or lower tuning.`);
+  if(vented&&pl>0.6)tips.push(`A ${Math.round(pl*1000)} mm port is very long. Use a slot port, or tune a little higher.`);
+  if(vented&&vMax>17)tips.push("The port air is too fast and will chuff. Use a bigger port diameter (it gets longer) or two ports.");
+  if(xMax>d.xmax)tips.push(hpOn?"The cone goes past Xmax at this power. Lower the power.":"The cone goes past Xmax at this power. Turn on the subsonic filter or lower the power.");
+  if(!vented)tips.push(`Sealed Qtc = ${(d.qts*Math.sqrt(1+d.vas/vb)).toFixed(2)}. 0.6–0.75 sounds tight and natural.`);
+  if(!tips.length)tips.push("This box is flat, quiet and within the driver's limits at this power.");
+  $("advice").textContent=tips.join(" ");
+}
+function optimise(){
+  const d=driver();let best=null;
+  for(let vb=15;vb<=90;vb+=1)for(let fb=18;fb<=55;fb+=0.5){
+    const r=simulate(d,true,vb,fb,+$("pd").value/1000,2.83,0,false);const ref=refLevel(r.spl),f3=f3of(r.spl);
+    let dev=0;FREQS.forEach((f,k)=>{if(f>1.6*f3&&f<300)dev=Math.max(dev,Math.abs(r.spl[k]-ref))});
+    if(dev>1)continue;
+    const score=f3+0.08*vb;
+    if(!best||score<best.s)best={s:score,vb,fb};
+  }
+  if(best){vented=true;setSeg();$("vb").value=best.vb;$("fb").value=best.fb;update();}
+}
+function setSeg(){$("tVent").setAttribute("aria-pressed",vented);$("tSeal").setAttribute("aria-pressed",!vented);}
+$("tVent").onclick=()=>{vented=true;setSeg();update()};
+$("tSeal").onclick=()=>{vented=false;setSeg();update()};
+function setHp(v){hpOn=v;$("hpOn").setAttribute("aria-pressed",v);$("hpOff").setAttribute("aria-pressed",!v);update();}
+$("hpOn").onclick=()=>setHp(true);$("hpOff").onclick=()=>setHp(false);
+$("preset").onchange=e=>{loadPreset(e.target.value);update()};
+["vb","fb","pd","pw","bw",...TS].forEach(id=>$(id).addEventListener("input",update));
+$("opt").onclick=optimise;
+window.addEventListener("resize",update);
+update();
+
+/* ---------- 2-D FDTD wave simulator ---------- */
+const N=260,DX=0.006,DT=0.98*DX/(C*Math.SQRT2);
+const cv=$("wave"),g=cv.getContext("2d"),img=g.createImageData(N,N);
+let p,vx,vy,solid,sxm,sym,damp,t=0,running=true;
+let radius=0,offset=0,freq=1500;
+const CX=N/2|0,CY=Math.round(N*0.42); // front face row
+function build(){
+  p=new Float32Array(N*N);vx=new Float32Array((N+1)*N);vy=new Float32Array(N*(N+1));
+  solid=new Uint8Array(N*N);damp=new Float32Array(N*N);t=0;
+  const hw=0.135,depth=0.34;
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    const x=(i-CX)*DX,y=(j-CY)*DX; // y up = forward
+    let ins=Math.abs(x)<=hw&&y<=0&&y>=-depth;
+    if(ins&&radius>0&&Math.abs(x)>hw-radius&&y>-radius){
+      const ox=Math.sign(x)*(hw-radius),oy=-radius;
+      if((x-ox)**2+(y-oy)**2>radius*radius)ins=false;
+    }
+    solid[i*N+j]=ins?1:0;
+    const e=Math.min(i,j,N-1-i,N-1-j),P=34;
+    damp[i*N+j]=e<P?1-0.3*((P-e)/P)**2:1;
+  }
+  sxm=new Uint8Array((N+1)*N);sym=new Uint8Array(N*(N+1));
+  for(let i=1;i<N;i++)for(let j=0;j<N;j++)sxm[i*N+j]=solid[i*N+j]|solid[(i-1)*N+j];
+  for(let i=0;i<N;i++)for(let j=1;j<N;j++)sym[i*(N+1)+j]=solid[i*N+j]|solid[i*N+j-1];
+  for(let k=0;k<420;k++)step(); // pre-run so the first frame already shows a field
+  draw();
+}
+const K1=RHO*C*C*DT/DX,K2=DT/(RHO*DX);
+function step(){
+  for(let i=1;i<N;i++)for(let j=0;j<N;j++){const k=i*N+j;vx[k]=sxm[k]?0:vx[k]-K2*(p[i*N+j]-p[(i-1)*N+j]);}
+  for(let i=0;i<N;i++)for(let j=1;j<N;j++){const k=i*(N+1)+j;vy[k]=sym[k]?0:vy[k]-K2*(p[i*N+j]-p[i*N+j-1]);}
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    const k=i*N+j;
+    if(solid[k]){p[k]=0;continue;}
+    p[k]=(p[k]-K1*((vx[(i+1)*N+j]-vx[i*N+j])+(vy[i*(N+1)+j+1]-vy[i*(N+1)+j])))*damp[k];
+  }
+  const si=CX+Math.round(offset/DX),sj=CY+1;
+  const env=Math.min(1,t*freq/3);
+  p[si*N+sj]+=env*Math.sin(TAU*freq*t)*0.6;
+  t+=DT;
+}
+function hex(c){const m=c.replace("#","");return[parseInt(m.slice(0,2),16),parseInt(m.slice(2,4),16),parseInt(m.slice(4,6),16)];}
+function draw(){
+  const bg=hex(css("--paper")),pos=hex(css("--accent")),neg=hex(css("--wood")),ink=hex(css("--ink"));
+  const d=img.data;
+  for(let j=0;j<N;j++)for(let i=0;i<N;i++){
+    const k=i*N+j,o=((N-1-j)*N+i)*4;
+    if(solid[k]){d[o]=ink[0];d[o+1]=ink[1];d[o+2]=ink[2];d[o+3]=255;continue;}
+    let v=Math.max(-1,Math.min(1,p[k]*4.5)),a=Math.sqrt(Math.abs(v)),c=v>0?pos:neg;
+    d[o]=bg[0]+(c[0]-bg[0])*a;d[o+1]=bg[1]+(c[1]-bg[1])*a;d[o+2]=bg[2]+(c[2]-bg[2])*a;d[o+3]=255;
+  }
+  g.putImageData(img,0,0);
+}
+function loop(){if(running){for(let k=0;k<4;k++)step();draw();}requestAnimationFrame(loop);}
+const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(reduce){running=false;$("wPlay").textContent="Play";}
+$("wPlay").onclick=()=>{running=!running;$("wPlay").textContent=running?"Pause":"Play";};
+$("wReset").onclick=build;
+$("wf").addEventListener("input",e=>{freq=+e.target.value;$("wfO").textContent=freq+" Hz";});
+$("wfO").textContent=freq+" Hz";
+document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{radius=+b.dataset.r;
+  document.querySelectorAll("[data-r]").forEach(x=>x.setAttribute("aria-pressed",x===b));build();});
+document.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{offset=+b.dataset.o;
+  document.querySelectorAll("[data-o]").forEach(x=>x.setAttribute("aria-pressed",x===b));build();});
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{update();draw();});
+new MutationObserver(()=>{update();draw();}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+build();loop();
+})();
+</script>

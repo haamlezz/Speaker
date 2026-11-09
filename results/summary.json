@@ -1,0 +1,153 @@
+{
+  "woofer": "8in woofer (Dayton RS225-8 class): Fs=28Hz Qts=0.394 Vas=42.5L Bl=11.53Tm Mms=49.3g Sens~85.0dB",
+  "alignments": {
+    "Sealed 30 L": 53.7,
+    "Sealed 46 L": 54.2,
+    "Vented 46 L @ 27 Hz (chosen)": 27.2,
+    "Vented 25 L @ 40 Hz (too small)": 37.0
+  },
+  "ports": [
+    {
+      "d_mm": 51,
+      "length_cm": 14.3,
+      "vmax_60W": 43.9,
+      "pipe_res_hz": 952
+    },
+    {
+      "d_mm": 64,
+      "length_cm": 23.5,
+      "vmax_60W": 28.1,
+      "pipe_res_hz": 609
+    },
+    {
+      "d_mm": 76,
+      "length_cm": 34.9,
+      "vmax_60W": 19.5,
+      "pipe_res_hz": 423
+    },
+    {
+      "d_mm": 102,
+      "length_cm": 64.6,
+      "vmax_60W": 11.0,
+      "pipe_res_hz": 238
+    }
+  ],
+  "woofer_chamber_modes": [
+    [
+      252.2,
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    [
+      504.4,
+      [
+        0,
+        0,
+        2
+      ]
+    ],
+    [
+      599.7,
+      [
+        0,
+        1,
+        0
+      ]
+    ],
+    [
+      650.5,
+      [
+        0,
+        1,
+        1
+      ]
+    ],
+    [
+      732.9,
+      [
+        1,
+        0,
+        0
+      ]
+    ],
+    [
+      756.6,
+      [
+        0,
+        0,
+        3
+      ]
+    ],
+    [
+      775.1,
+      [
+        1,
+        0,
+        1
+      ]
+    ],
+    [
+      783.6,
+      [
+        0,
+        1,
+        2
+      ]
+    ]
+  ],
+  "panel_first_resonance_hz": {
+    "MDF 18mm": {
+      "side_unbraced": 262,
+      "side_braced_3_bays": 577,
+      "baffle_double_36mm": 1374
+    },
+    "Birch ply 18mm": {
+      "side_unbraced": 395,
+      "side_braced_3_bays": 870,
+      "baffle_double_36mm": 2071
+    },
+    "Particleboard 18mm": {
+      "side_unbraced": 238,
+      "side_braced_3_bays": 524,
+      "baffle_double_36mm": 1247
+    },
+    "Solid pine 18mm": {
+      "side_unbraced": 501,
+      "side_braced_3_bays": 1104,
+      "baffle_double_36mm": 2630
+    }
+  },
+  "fdtd_ripple_std_db": {
+    "Sharp edges, 26 cm": 1.03,
+    "20 mm roundover, 26 cm": 0.63,
+    "40 mm roundover, 26 cm": 0.53,
+    "40 mm chamfer, 26 cm": 1.12,
+    "Sharp, tweeter 4 cm off-centre": 0.64
+  },
+  "system": {
+    "xover": [
+      350,
+      2600
+    ],
+    "ripple_40_18k_db": 1.46
+  },
+  "chosen_box": {
+    "vb_l": 46.0,
+    "fb_hz": 27.0,
+    "port_d_mm": 76.2,
+    "port_len_cm": 34.9,
+    "optimiser": {
+      "vb": 55.0,
+      "fb": 26.5,
+      "f3": 25.5
+    }
+  },
+  "baffle": {
+    "width_m": 0.27,
+    "baffle_step_f3_hz": 426,
+    "tweeter_edge_dip_hz": 1270
+  }
+}
